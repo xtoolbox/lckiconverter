@@ -1,0 +1,33 @@
+{
+  "name": "LCKiConverter",
+  "description": "KiCad extension for lceda.cn (aka easyeda.com) by xtoolbox.org",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "contextMenus", "tabs"],
+  "icons": {
+    "16": "/images/kicad_logo16.png",
+    "32": "/images/kicad_logo32.png",
+    "48": "/images/kicad_logo48.png",
+    "128": "/images/kicad_logo128.png"
+  },
+
+  "content_scripts": [
+		{
+			"matches": ["https://*.lceda.cn/editor*", "https://*.easyeda.com/editor*"],
+			"css": ["css/app.css","css/chunk-vendors.css"],
+      "js": ["js/app.js", "js/chunk-vendors.js"],
+			"run_at": "document_idle"
+		}
+  ],
+  
+  "web_accessible_resources": [ {
+      "matches":["https://*.lceda.cn/*", "https://*.easyeda.com/*"],
+      "resources":["inject.js", "fonts/element-icons.ttf", "fonts/element-icons.woff"]
+    }
+  ],
+  
+  "options_page": "options.html"
+}
