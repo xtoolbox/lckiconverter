@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/Vue-3.x-blue.svg" alt="vue">
   </a>
   <a href="https://www.typescriptlang.org/">
-    <img src="https://img.shields.io/badge/TypeScript-4.x-brightgreen.svg" alt="vue">
+    <img src="https://img.shields.io/badge/TypeScript-4.x-brightgreen.svg" alt="TypeScript">
   </a>
   <a href="https://github.com/element-plus/element-plus">
     <img src="https://img.shields.io/badge/Element--Plus-1.x-blue" alt="element-plus">
@@ -13,6 +13,9 @@
    <a href="https://github.com/npm/npm">
     <img src="https://img.shields.io/badge/npm-6.x-brightgreen" alt="npm">
    </a>
+   <a href="https://github.com/xtoolbox/lckiconverter/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT">
+  </a>
 </p>
 
 
