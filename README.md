@@ -19,9 +19,9 @@
 </p>
 
 
-一个将lceda.cn的器件转换为KiCad格式的浏览器扩展.
+一个将lceda.cn的器件转换为KiCad格式的浏览器扩展. 可以转换原理图库，封装库以及3D模型。
 
-A browser extension to convert component in lceda.cn (aka easyeda.com) to KiCad format.
+A browser extension to convert component in lceda.cn (aka easyeda.com) to KiCad format. Support symbol library, footprint module and 3d model.
 
 ## 运行环境 Run Environmnet
 
@@ -32,7 +32,7 @@ Chrome, Edge
 
 Ensure Node.js installed.
 ```bat
-git pull https://github.com/xtoolbox/lckiconverter.git
+git clone https://github.com/xtoolbox/lckiconverter.git
 cd lckiconverter
 npm install
 npm run build
