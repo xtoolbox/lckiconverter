@@ -1,12 +1,12 @@
 {
   "name": "LCKiConverter",
-  "description": "KiCad extension for lceda.cn (aka easyeda.com) by xtoolbox.org",
+  "description": "An extension to converter symbol/footprint/3D Model on lceda.cn (aka easyeda.com) to KiCad format.",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["storage", "activeTab", "scripting", "contextMenus", "tabs"],
+  "permissions": ["storage"],
   "icons": {
     "16": "/images/kicad_logo16.png",
     "32": "/images/kicad_logo32.png",
