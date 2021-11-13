@@ -36,15 +36,19 @@
 // import {createI18n} from 'vue-i18n'
 
 let setLocale:(locale:string)=>void = ()=>{};
+let currentLocale:'ch'|'en' = 'ch';
 export function setup_language(text:string|((locale:string)=>void)){
     if(typeof text === 'string'){
       if(text === '帮助'){
+        currentLocale = 'ch';
         setLocale('ch');
       }else{
+        currentLocale = 'en'
         setLocale('en');
       }
     }else{
       setLocale = text;
+      setLocale(currentLocale);
     }
 }
 
@@ -54,10 +58,12 @@ export const transTable : any = {
   '3D Model':'3D模型',
   'Open component list':'打开器件列表',
   'Use [Ctrl]+[Left Click] to select item':'使用[Ctrl]加[鼠标左键]选择要下载的原理图库/封装/3D模型',
+  'If [Ctrl]+[Click] not works, retry after refresh page':'如果选择没有生效，刷新页面后重试',
   'Download':'下载',
   ' Mode':'模式',
   'Std':'标准',
   'Pro':'专业',
   ' Converter':'转换器',
   'Help':'帮助',
+  'http://lckicad-en.xtoolbox.org':'http://lckicad.xtoolbox.org',
 };

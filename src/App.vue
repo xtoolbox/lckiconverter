@@ -10,7 +10,7 @@
   <el-tag style="float:left;" size='small' effect="dark"> LC-KiCad{{tr[' Converter']}} {{tr[mode]}}{{tr[' Mode']}}</el-tag>
   <el-button style="float:left; " size='mini' type="success" title="Download selected component" @click="download">{{tr['Download']}}</el-button>
   <el-button style="float:right; " size='mini' icon="el-icon-close" @click="()=>$toggleVisible()"/>
-  <a href="http://lckicad.xtoolbox.org" style="float:right;" target="_blank">{{tr['Help']}}</a>
+  <a :href="tr['http://lckicad-en.xtoolbox.org']" style="float:right;" target="_blank">{{tr['Help']}}</a>
 
   <el-progress :text-inside="true" style="margin-top:2px;" :stroke-width="20" v-if="progress>0 && progress<100" :percentage="progress" status="success"></el-progress>
   <el-table
@@ -19,7 +19,7 @@
     :height="dialogGeo.height - 40"
     border
     class="kh-event-table"
-    :empty-text="tr['Open component list']+'  ' + tr['Use [Ctrl]+[Left Click] to select item']"
+    :empty-text="tr['Open component list']+'. ' + tr['Use [Ctrl]+[Left Click] to select item'] + '. ' + tr['If [Ctrl]+[Click] not works, retry after refresh page']"
     :style="{width:''+(dialogGeo.width-5)+'px'}">
     <el-table-column
       prop="symbol"
