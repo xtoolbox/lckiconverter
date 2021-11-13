@@ -2,13 +2,13 @@
 
 <p align="center">
   <a href="https://github.com/vuejs/vue">
-    <img src="https://img.shields.io/badge/Vue-3.x-blue.svg" alt="vue">
+    <img src="https://img.shields.io/badge/Vue-3.x-brightgreen.svg" alt="vue">
   </a>
   <a href="https://www.typescriptlang.org/">
     <img src="https://img.shields.io/badge/TypeScript-4.x-brightgreen.svg" alt="TypeScript">
   </a>
   <a href="https://github.com/element-plus/element-plus">
-    <img src="https://img.shields.io/badge/Element--Plus-1.x-blue" alt="element-plus">
+    <img src="https://img.shields.io/badge/Element--Plus-1.x-brightgreen" alt="element-plus">
   </a>
    <a href="https://github.com/npm/npm">
     <img src="https://img.shields.io/badge/npm-6.x-brightgreen" alt="npm">
@@ -22,6 +22,12 @@
 一个将lceda.cn的器件转换为KiCad格式的浏览器扩展. 可以转换原理图库，封装库以及3D模型。
 
 A browser extension to convert component in lceda.cn (aka easyeda.com) to KiCad format. Support symbol library, footprint module and 3d model.
+
+## 如何使用 How to use
+从Chrome应用商店添加，[商店地址](https://chrome.google.com/webstore/detail/lckiconverter/lbgkkidccknjbofkefinfempaamjcmhb)
+
+Add from Chrome app store，[Address](https://chrome.google.com/webstore/detail/lckiconverter/lbgkkidccknjbofkefinfempaamjcmhb)
+
 
 ## 运行环境 Run Environmnet
 
