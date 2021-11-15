@@ -3,7 +3,7 @@
     <el-button size="mini" @click="testConvert">Convert</el-button>
     <a href="https://www.compuphase.com/electronics/LibraryFileFormats.pdf">KiCad Format</a>
     <el-button size="mini" @click="RunTest" :type="testResult">RunTest</el-button>
-    <el-button size="mini" @click="View3D" >RunTest</el-button>
+    <el-button size="mini" @click="View3D" >View3D</el-button>
     <el-button size="mini" @click="ToggleLang" >Toggle Lang</el-button>
 
 <el-row>
@@ -101,7 +101,7 @@ export default defineComponent({
             rowData.value = {data3d : getTestObj()||""};
             vrData.value = {data3d: getTestVrml()||""};
             show3D.value = true;
-            kicadData.value = objmtl2vrml(getTestObj()||"");
+            kicadData.value = objmtl2vrml(getTestObj()||"", true, "test");
         }
         let langFlag = true;
         function ToggleLang(){

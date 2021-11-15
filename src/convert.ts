@@ -53,7 +53,7 @@ function log(...args:any)
     console.log('[LCKi] Cvt:', ...args);
 }
 
-export function downloadData(namePrefix:string, items:CompRow_t[], setProgress:(percent:number)=>void)
+export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t[], setProgress:(percent:number)=>void)
 {
     let zip = new JSZip();
     let footprint = zip.folder(namePrefix+'.pretty');
@@ -93,7 +93,7 @@ export function downloadData(namePrefix:string, items:CompRow_t[], setProgress:(
             if(comp.model3d && (!t.has(comp.model3d.uuid)) && comp.data3d){
                 cvtName = "3D model:" + comp.model3d.display_title || comp.model3d.title;
                 t.set(comp.model3d.uuid,true);
-                let r = convertData(comp.data3d, comp.model3d.display_title || comp.model3d.title);
+                let r = convertData(comp.data3d, comp.model3d.display_title || comp.model3d.title, tryStep);
                 folder3d.file(r.filename, r.content);
             }
         }catch(e){
@@ -119,13 +119,23 @@ interface KiCadData{
     filename:string
     content:string
 }
-export function convertData(data:JLCComp_t|string, name?:string):KiCadData
+export function convertData(data:JLCComp_t|string, name?:string, tryStep?:boolean):KiCadData
 {
     if(typeof data === "string"){
-        return {
-            filename: (name||"unknown") +".wrl",
+        let fullName = name||"unknown";
+        if(tryStep){
+            try{
+                let stepData = objmtl2vrml(data, true, fullName);
+                return {filename:fullName+".step", content:stepData}
+            }catch(e){
+                log(e);
+                log("Fail to convert to step, try to convert wrl")
+            }
+        }
+        return{
+            filename: fullName +".wrl",
             content:objmtl2vrml(data),
-        };
+        }
     }else{
         //console.log(data)
         if((data as any).result){

@@ -40,6 +40,8 @@ function log(...args:any[]){
     console.log("[LCKi] ObjMtl2Vrml:",...args);
 }
 
+import {Shell, objmtl2step} from './jlcobj2step'
+
 const _newmtl_pattern = /^newmtl /;
 const _endmtl_pattern = /^endmtl/;
 
@@ -107,14 +109,14 @@ const VRML_Head = `#VRML V2.0 utf8
 # by admin@xtoolbox.org
 # visit http://lckicad.xtoolbox.org for more info
 `;
-interface Vertices{x:number, y:number, z:number};
+export interface Vertices{x:number, y:number, z:number};
 function Vertices(x:string,y:string,z:string):Vertices{
     return {
         x:parseFloat(x),y:parseFloat(y),z:parseFloat(z),
     }
 }
 
-interface Face{
+export interface Face{
     index:number[]
 }
 function MakeFace(index:string[]):Face
@@ -131,7 +133,7 @@ function MakeFace(index:string[]):Face
     return {index:res};
 }
 
-export function objmtl2vrml(data:string):string
+export function objmtl2vrml(data:string, toStep:boolean = false, filename:string="part"):string
 {
     let vrmlRes = ""
     let mtlRes = '';
@@ -150,6 +152,8 @@ export function objmtl2vrml(data:string):string
     let vertices = [Vertices('0','0','0')];
     let curMtlName = '1';
     let faces:Face[] = [];
+    let colorMap = new Map<string,{r:number,g:number,b:number}>();
+    let shell:Shell[] = [];
     for ( let i = 0, l = lines.length; i < l; i ++ ) {
         let line = lines[ i ];
         if(_newmtl_pattern.test(line)){
@@ -165,6 +169,9 @@ export function objmtl2vrml(data:string):string
                 case 'Kd':
                 case 'Ks':
                     currenMtl[key] = [parseFloat(v1), parseFloat(v2), parseFloat(v3)];
+                    if(key == 'Ka'){
+                        colorMap.set(currenMtl.name, {r:currenMtl.Ka[0],g:currenMtl.Ka[1],b:currenMtl.Ka[2]});
+                    }
                 case 'd':{
                     let d = parseFloat(v1);
                     currenMtl.d = d>0.1?d:1.0;
@@ -181,11 +188,15 @@ export function objmtl2vrml(data:string):string
             }
         }else if(line[0] !== '#'){
             if(line.trim() !== ""){
-            let [key, ...v] = line.split(/\s+/);
+            let [key, ...v] = line.trim().split(/\s+/);
             switch(key){
                 case 'usemtl':
                     if(faces.length > 0){
-                        vrmlRes += Face2VRML(faces, vertices, curMtlName);
+                        if(toStep){
+                            shell.push({faces:faces, ln:0, color:colorMap.get(curMtlName)||{r:1,g:1,b:1}})
+                        }else{
+                            vrmlRes += Face2VRML(faces, vertices, curMtlName);
+                        }
                     }
                     faces = [];
                     curMtlName = v[0];
@@ -206,8 +217,16 @@ export function objmtl2vrml(data:string):string
         }
     }
     if(faces.length > 0){
-        vrmlRes += Face2VRML(faces, vertices, curMtlName);
+        if(toStep){
+            shell.push({faces:faces, ln:0, color:colorMap.get(curMtlName)||{r:1,g:1,b:1}})
+        }else{
+            vrmlRes += Face2VRML(faces, vertices, curMtlName);
+        }
         faces = [];
+    }
+    if(toStep){
+        return objmtl2step(shell, vertices, filename);
     }
     return VRML_Head + mtlRes + vrmlRes;
 }
+
