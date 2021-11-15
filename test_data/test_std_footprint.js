@@ -260,7 +260,7 @@ module.exports = {jlc:{
  (fp_line (start 20.003 27.369) (end 20.003 21.146) (layer F.SilkS) (width 0.508)) 
  (fp_poly (pts (xy 7.239 24.892) (xy 17.018 24.892) (xy 17.018 27.051) (xy 7.239 27.051)) (layer F.SilkS) (width 0.12)) 
  (pad "" np_thru_hole circle (at 13.462 11.684) (size 2.032 2.032) (drill 2.032) (layers *.Cu *.Mask)) 
- (pad 5 thru_hole oval (at 1.778 8.001) (size 4 2) (drill oval 3 1.198) (layers *.Cu *.Mask)) 
+ (pad 5 thru_hole oval (at 1.778 8.001) (size 4 2) (drill oval 1.198 3) (layers *.Cu *.Mask)) 
  (pad 5 np_thru_hole oval (at 7.747 8.398 15) (size 4 2) (drill 1.198) (layers *.Cu *.Mask)) 
  (pad "" thru_hole circle (at -2.794 4.318) (size 0.61 0.61) (drill 0.304) (layers *.Cu *.Mask)) 
  
