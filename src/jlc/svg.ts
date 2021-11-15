@@ -97,7 +97,10 @@ export function svg_solve_arc(param:string, check?:boolean):arc_result
     let sin_phi = Math.sin(phi);
     let x1_ =  cos_phi*(x1-x2)/2 + sin_phi*(y1-y2)/2;
     let y1_ = -sin_phi*(x1-x2)/2 + cos_phi*(y1-y2)/2;
-    let temp = Math.sqrt( (rx*rx*ry*ry - rx*rx*y1_*y1_ - ry*ry*x1_*x1_) / (rx*rx*y1_*y1_+ry*ry*x1_*x1_));
+    let tt1 = (rx*rx*ry*ry - rx*rx*y1_*y1_ - ry*ry*x1_*x1_);
+    let tt2 = (rx*rx*y1_*y1_+ry*ry*x1_*x1_);
+    if(tt1<0)tt1=0;
+    let temp = Math.sqrt( tt1 / tt2);
     let factor = Fa == Fs ? -1.0 : 1.0;
     let cx_ = factor*temp*rx*y1_/ry;
     let cy_ = -factor*temp*ry*x1_/rx;

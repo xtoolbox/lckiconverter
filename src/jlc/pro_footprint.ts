@@ -675,7 +675,7 @@ function parse_3DModel(device:JLCDevice_t, isThru:boolean):kifp_element[]
         dz = jp2kifp_MM(dz);
         if(isThru)dz = 0;
         return [
-            ki3d_info(title, [dx,dy,dz], [1,1,1], [-rx,-ry,-rz]),
+            ...ki3d_info(title, [dx,dy,dz], [1,1,1], [-rx,-ry,-rz]),
             true
         ]
     }

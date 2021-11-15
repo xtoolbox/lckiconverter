@@ -302,10 +302,11 @@ function parse_PAD(box:BBox_t, args:string[], segs:string[]):kifp_element[]
     }
     let drill:kifp_element[] = ['drill'];
     if(Number(holeLength)){
-        drill.push('oval', toMM(holeLength));
+        drill.push('oval', toMM(holeRadius)*2, toMM(holeLength));
+    }else{
+        drill.push(toMM(holeRadius)*2);
     }
     let polyParam:kifp_element[] = [];
-    drill.push(toMM(holeRadius)*2);
     if(shape == "ELLIPSE"){
         shape = "circle"
     }else if(shape == "RECT"){
@@ -498,12 +499,17 @@ interface SVGNodeInfo
 }
 export function ki3d_info(name:string, pos:number[], scale:number[], rotate:number[]):kifp_element[]
 {
-    return [
+    return [[
+        'model', fp_string('${KIPRJMOD}/'+getPrefix()+'.3dshapes'+'/'+name+'.step'),true,
+        ['offset', ['xyz', ...pos]],
+        ['scale', ['xyz', ...scale]],
+        ['rotate', ['xyz', ...rotate]],true
+    ],[
         'model', fp_string('${KIPRJMOD}/'+getPrefix()+'.3dshapes'+'/'+name+'.wrl'),true,
         ['offset', ['xyz', ...pos]],
         ['scale', ['xyz', ...scale]],
         ['rotate', ['xyz', ...rotate]],true
-    ]
+    ]]
 }
 
 function parse_SVGNODE(box:BBox_t, args:string[], segs:string[], comp:JLCComp_t){
@@ -520,7 +526,7 @@ function parse_SVGNODE(box:BBox_t, args:string[], segs:string[], comp:JLCComp_t)
    if((box as CBox_t).isThru){
        z = 0;
    }
-   return [ki3d_info(node.attrs.title,
+   return [...ki3d_info(node.attrs.title,
     [toMM(x), -toMM(y), toMM(node.attrs.z)],
     [1,1,1],
     [-Number(rx), -Number(ry), -Number(rz)])
