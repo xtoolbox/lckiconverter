@@ -49,7 +49,7 @@ module.exports.jlc={
 module.exports.kicad=`(module test (layer F.Cu) (tedit 00000000) 
  (fp_text reference REF** (at 0 0.754) (layer F.SilkS) 
    (effects (font (size 1 1) (thickness 0.1499)))) 
- (fp_text value 3a5efadbd5044c9793f8f08c2b353fe5 (at 0 0.5) (layer F.Fab) 
+ (fp_text value pro:3a5efadbd5044c9793f8f08c2b353fe5 (at 0 0.5) (layer F.Fab) 
    (effects (font (size 1 1) (thickness 0.1499)))) 
  (pad "" thru_hole circle (at 4.7968 -1.0413) (size 0.61 0.61) (drill 0.305) (layers *.Cu)) 
  (pad "" thru_hole circle (at 8.8608 -1.2953) (size 0.61 0.61) (drill 0.305) (layers *.Cu)) 

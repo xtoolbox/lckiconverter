@@ -53,7 +53,7 @@ function log(...args:any)
     console.log('[LCKi] Cvt:', ...args);
 }
 
-export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t[], setProgress:(percent:number)=>void)
+export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t[], setProgress:(percent:number)=>void, mode:string)
 {
     let zip = new JSZip();
     let footprint = zip.folder(namePrefix+'.pretty');
@@ -93,7 +93,8 @@ export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t
             if(comp.model3d && (!t.has(comp.model3d.uuid)) && comp.data3d){
                 cvtName = "3D model:" + comp.model3d.display_title || comp.model3d.title;
                 t.set(comp.model3d.uuid,true);
-                let r = convertData(comp.data3d, comp.model3d.display_title || comp.model3d.title, tryStep);
+                let r = convertData(comp.data3d, comp.model3d.display_title || comp.model3d.title, tryStep,
+                    mode + ":" + (comp.model3d.uuid||""));
                 folder3d.file(r.filename, r.content);
             }
         }catch(e){
@@ -119,13 +120,13 @@ interface KiCadData{
     filename:string
     content:string
 }
-export function convertData(data:JLCComp_t|string, name?:string, tryStep?:boolean):KiCadData
+export function convertData(data:JLCComp_t|string, name?:string, tryStep?:boolean, uuid3d?:string):KiCadData
 {
     if(typeof data === "string"){
         let fullName = name||"unknown";
         if(tryStep){
             try{
-                let stepData = objmtl2vrml(data, true, fullName);
+                let stepData = objmtl2vrml(data, true, fullName, uuid3d);
                 return {filename:fullName+".step", content:stepData}
             }catch(e){
                 log(e);
@@ -134,7 +135,7 @@ export function convertData(data:JLCComp_t|string, name?:string, tryStep?:boolea
         }
         return{
             filename: fullName +".wrl",
-            content:objmtl2vrml(data),
+            content:objmtl2vrml(data, false, fullName, uuid3d),
         }
     }else{
         //console.log(data)

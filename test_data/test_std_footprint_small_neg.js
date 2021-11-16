@@ -180,7 +180,7 @@ module.exports = {jlc:{
   kicad:`(module 905-761A3172S10204 (layer F.Cu) (tedit 00000000) 
  (fp_text reference REF** (at 0 -3.207) (layer F.SilkS) 
    (effects (font (size 1 1) (thickness 0.15)) (justify left))) 
- (fp_text value 050f013325a840acb9328cf8b62ccb74 (at 0 -0.667) (layer F.Fab) 
+ (fp_text value std:050f013325a840acb9328cf8b62ccb74 (at 0 -0.667) (layer F.Fab) 
    (effects (font (size 1 1) (thickness 0.15)) (justify left))) 
  (fp_line (start 1.7 -4.65) (end 1.7 -5.1) (layer Dwgs.User) (width 0.12)) 
  (fp_line (start 1.7 -5.1) (end 2.1 -6.35) (layer Dwgs.User) (width 0.12)) 

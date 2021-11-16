@@ -264,7 +264,7 @@ export default defineComponent({
     function download(){
       downloadData(dialogGeo.value.prefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
         progress.value = percent;
-      });
+      }, mode.value);
     }
 
     function showHelp(){

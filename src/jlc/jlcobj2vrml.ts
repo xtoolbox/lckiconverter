@@ -133,7 +133,7 @@ function MakeFace(index:string[]):Face
     return {index:res};
 }
 
-export function objmtl2vrml(data:string, toStep:boolean = false, filename:string="part"):string
+export function objmtl2vrml(data:string, toStep:boolean = false, filename:string="part", uuid?:string):string
 {
     let vrmlRes = ""
     let mtlRes = '';
@@ -225,8 +225,8 @@ export function objmtl2vrml(data:string, toStep:boolean = false, filename:string
         faces = [];
     }
     if(toStep){
-        return objmtl2step(shell, vertices, filename);
+        return objmtl2step(shell, vertices, filename, uuid);
     }
-    return VRML_Head + mtlRes + vrmlRes;
+    return VRML_Head + `# uuid: ${uuid||""}` + "\n" + mtlRes + vrmlRes;
 }
 

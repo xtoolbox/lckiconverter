@@ -101,7 +101,7 @@ export default defineComponent({
             rowData.value = {data3d : getTestObj()||""};
             vrData.value = {data3d: getTestVrml()||""};
             show3D.value = true;
-            kicadData.value = objmtl2vrml(getTestObj()||"", true, "test");
+            kicadData.value = objmtl2vrml(getTestObj()||"", true, "test", "0000test_uuid0000");
         }
         let langFlag = true;
         function ToggleLang(){

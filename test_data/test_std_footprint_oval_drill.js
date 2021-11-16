@@ -182,7 +182,7 @@ module.exports = {jlc:{
   kicad:`(module TYPE-C-SMD_TYPE-C-31-M-16 (layer F.Cu) (tedit 00000000) 
  (fp_text reference REF** (at 0 -3.207) (layer F.SilkS) 
    (effects (font (size 1 1) (thickness 0.15)) (justify left))) 
- (fp_text value cc33f00711a541bfbe7fb0b164318c1f (at 0 -0.667) (layer F.Fab) 
+ (fp_text value std:cc33f00711a541bfbe7fb0b164318c1f (at 0 -0.667) (layer F.Fab) 
    (effects (font (size 1 1) (thickness 0.15)) (justify left))) 
  (fp_circle (center -4.48 -2.31) (end -4.45 -2.31) (layer Eco2.User) (width 0.06)) 
  (fp_line (start 4.5 4.5) (end 4.5 -2.3) (layer F.CrtYd) (width 0.12)) 

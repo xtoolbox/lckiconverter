@@ -155,7 +155,7 @@ export function convert_std_footprint(comp:JLCComp_t):string
         ["layer", "F.Cu"], ["tedit",
         fp_timestamp()], true,
         kifp_text("reference", box, "REF**", "F.SilkS", SvgPoint(box.x+0, box.y-10)), true,
-        kifp_text("value", box, comp.uuid  , "F.Fab", SvgPoint(box.x+0, box.y-0)), true,
+        kifp_text("value", box, "std:"+comp.uuid  , "F.Fab", SvgPoint(box.x+0, box.y-0)), true,
     ];
     
     comp.dataStr.shape?.forEach(s=>{

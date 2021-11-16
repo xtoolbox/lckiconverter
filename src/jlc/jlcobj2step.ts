@@ -290,6 +290,21 @@ function SHAPE_REPRESENTATION(shell:Shell[], vertices:Vertices[], oneShell?:bool
 function collectColor(shell:Shell|FaceColor_t, ln:number, stepMap:Map<string,number>, curve?:boolean):STEP_RECORDS
 {
     let res= new STEP_RECORDS;
+    let cn = `CR:${shell.color.r},${shell.color.g}, ${shell.color.b}`;
+    if(stepMap.has(cn)){
+        res.push(`#${ln} = STYLED_ITEM('color',(#${stepMap.get(cn)}),#${shell.ln});`); ln++;
+    }else{
+        res.push(`#${ln} = STYLED_ITEM('color',(#${ln+1}),#${shell.ln});`); ln++;
+        stepMap.set(cn, ln);
+        res.push(`#${ln} = PRESENTATION_STYLE_ASSIGNMENT((#${ln+1}));`); ln++;
+        res.push(`#${ln} = SURFACE_STYLE_USAGE(.BOTH.,#${ln+1});`); ln++;
+        res.push(`#${ln} = SURFACE_SIDE_STYLE('',(#${ln+1}));`); ln++;
+        res.push(`#${ln} = SURFACE_STYLE_FILL_AREA(#${ln+1});`); ln++;
+        res.push(`#${ln} = FILL_AREA_STYLE('',(#${ln+1}));`); ln++;
+        res.push(`#${ln} = FILL_AREA_STYLE_COLOUR('',#${ln+1});`); ln++;
+        res.push(`#${ln} = COLOUR_RGB('',${output_v(shell.color.r,shell.color.g,shell.color.b)});`); ln++;
+    }
+    /*
     res.push(`#${ln} = STYLED_ITEM('color',(#${ln+1}),#${shell.ln});`); ln++;
     res.push(`#${ln} = PRESENTATION_STYLE_ASSIGNMENT((#${ln+1}));`); ln++;
     res.push(`#${ln} = SURFACE_STYLE_USAGE(.BOTH.,#${ln+1});`); ln++;
@@ -304,7 +319,7 @@ function collectColor(shell:Shell|FaceColor_t, ln:number, stepMap:Map<string,num
         stepMap.set(cn, ln);
         res.push(`#${ln} = COLOUR_RGB('',${output_v(shell.color.r,shell.color.g,shell.color.b)});`); ln++;
     }
-
+*/
     //res.push(`#${ln} = FILL_AREA_STYLE_COLOUR('',#${ln+1});`); ln++;
     //res.push(`#${ln} = COLOUR_RGB('',${shell.color.r},${shell.color.g}, ${shell.color.b});`); ln++;
     //res.push(`#${ln} = CURVE_STYLE('',#${ln+1},POSITIVE_LENGTH_MEASURE(0.1),#${ln+2});`); ln++;
@@ -351,11 +366,11 @@ function GEOMETRIC_REPRESENTATION_CONTEXT(shell:Shell[], ln:number, stepMap:Map<
     return res;
 }
 
-export function objmtl2step(shell:Shell[], vertices:Vertices[], filename:string):string
+export function objmtl2step(shell:Shell[], vertices:Vertices[], filename:string, uuid?:string):string
 {
     let res = `ISO-10303-21;
 HEADER;
-FILE_DESCRIPTION(('LCKiConverter Model lckicad.xtoolbox.org'),'2;1');
+FILE_DESCRIPTION(('LCKiConverter Model lckicad.xtoolbox.org','uuid: ${uuid||""}'),'2;1');
 FILE_NAME('${filename}.step','${(new Date()).toISOString()}',('LCEDA'),(
     ''),'LCKiConverter','LCKiConverter','');
 FILE_SCHEMA(('AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }'));
@@ -379,3 +394,22 @@ DATA;
     return res;
 }
 
+function step_test(){
+    let r = normal3p(
+        {x:0,y:0,z:0},
+        {x:10,y:0,z:0},
+        {x:0,y:-10,z:0},
+    );
+    console.log(r);
+
+    r = normal3p(
+        {x:0,y:0,z:0},
+        {x:0,y:0,z:9},
+        {x:10,y:0,z:9},
+    );
+    console.log(r);
+    let d = new Date();
+    console.log(d.toISOString(), d.toUTCString());
+}
+
+step_test();

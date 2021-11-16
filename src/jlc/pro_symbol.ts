@@ -286,7 +286,7 @@ export function convert_pro_symbol(comp:JLCComp_t):string
    res += text_field(2, {x:0, y:headLine+10, v:get_footprint_name(comp.device?.footprint?.uuid||"")}, false);
    res += text_field(3, {x:0, y:headLine+30, v:comp.device?.attributes['Datasheet'] || ""}, false);
    res += text_field(4, {x:0, y:headLine+50, v:comp.device?.attributes['Supplier Part'] || ""}, false, 'SuppliersPartNumber');
-   res += text_field(5, {x:0, y:headLine+70, v:comp.uuid || ""}, false, 'uuid');
+   res += text_field(5, {x:0, y:headLine+70, v:"pro:"+(comp.uuid || "")}, false, 'uuid');
    res += "DRAW\n"
    res += drawRes;
    pinList.forEach(p=>{

@@ -161,7 +161,7 @@ export function convert_std_symbol(comp:JLCComp_t):string
     res += text_field(2, get_footprint_name(comp.dataStr.head?.puuid||""), headLine+10, false);
     res += text_field(3, (comp as any).szlcsc?.url || (comp as any).lcsc?.url || "", headLine+30, false);
     res += text_field(4, (comp as any).szlcsc?.number || (comp as any).lcsc?.number || "", headLine+50, false, 'SuppliersPartNumber');
-    res += text_field(5, comp.uuid|| "", headLine+50, false, 'uuid');
+    res += text_field(5, "std:"+(comp.uuid|| ""), headLine+50, false, 'uuid');
     res += "DRAW\n"
     res += drawRes;
     res += "ENDDRAW\n"

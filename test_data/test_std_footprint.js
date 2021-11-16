@@ -156,7 +156,7 @@ module.exports = {jlc:{
   kicad:`(module TEST_FOOTPRINT (layer F.Cu) (tedit 00000000) 
  (fp_text reference REF** (at 0 -3.207) (layer F.SilkS) 
    (effects (font (size 1 1) (thickness 0.15)) (justify left))) 
- (fp_text value 7104e35ebef446ed84bed55a26f80ca8 (at 0 -0.667) (layer F.Fab) 
+ (fp_text value std:7104e35ebef446ed84bed55a26f80ca8 (at 0 -0.667) (layer F.Fab) 
    (effects (font (size 1 1) (thickness 0.15)) (justify left))) 
  (fp_text user text (at 0.254 1.905) (layer B.Cu) 
    (effects (font (size 1.715 1.715) (thickness 0.254)) (justify left mirror))) 
