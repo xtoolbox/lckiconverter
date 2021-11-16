@@ -24,11 +24,13 @@
 A browser extension to convert component in lceda.cn (aka easyeda.com) to KiCad format. Support symbol library, footprint module and 3d model.
 
 ## 如何使用 How to use
-从Chrome应用商店添加，[商店地址](https://chrome.google.com/webstore/detail/lckiconverter/lbgkkidccknjbofkefinfempaamjcmhb)
+[从Chrome应用商店添加.](https://chrome.google.com/webstore/detail/lckiconverter/lbgkkidccknjbofkefinfempaamjcmhb)
 
-Add from Chrome app store，[Address](https://chrome.google.com/webstore/detail/lckiconverter/lbgkkidccknjbofkefinfempaamjcmhb)
+[Add from Chrome app store.](https://chrome.google.com/webstore/detail/lckiconverter/lbgkkidccknjbofkefinfempaamjcmhb)
 
+[从Edge应用商店添加.](https://microsoftedge.microsoft.com/addons/detail/lckiconverter/fmebjbgbgkgpogefaogfpdmfemlpnpaa)
 
+[Add from Edge app store.](https://microsoftedge.microsoft.com/addons/detail/lckiconverter/fmebjbgbgkgpogefaogfpdmfemlpnpaa)
 ## 运行环境 Run Environmnet
 
 Chrome, Edge
