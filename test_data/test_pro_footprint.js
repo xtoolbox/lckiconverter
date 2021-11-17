@@ -40,13 +40,13 @@ module.exports.jlc={
       "createTime": 1635519971,
       "updateTime": 1635600547,
       "created_at": "2021-10-29 23:06:11",
-      "display_title": "test",
+      "display_title": "test ()|\\/%^7",
       "updated_at": "2021-10-30 21:29:07",
       "ticket": 85,
       "has_device": false
     }
   };
-module.exports.kicad=`(module test (layer F.Cu) (tedit 00000000) 
+module.exports.kicad=`(module "test ()|\\\\/%^7" (layer F.Cu) (tedit 00000000) 
  (fp_text reference REF** (at 0 0.754) (layer F.SilkS) 
    (effects (font (size 1 1) (thickness 0.1499)))) 
  (fp_text value pro:3a5efadbd5044c9793f8f08c2b353fe5 (at 0 0.5) (layer F.Fab) 

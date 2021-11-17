@@ -94,7 +94,8 @@ const j2k_layer_name = {
 
 export function fp_name(v:string):string
 {
-    return v.replace(/[\%\s\r\n\$\"\?/:]/g, "_")
+    return fp_string(v);
+    //return v.replace(/[\%\s\r\n\$\"\?/:]/g, "_")
 }
 
 function isCourtYard(id:string):string|undefined
