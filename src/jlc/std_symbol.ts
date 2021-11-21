@@ -355,7 +355,7 @@ function parse_text(box:BBox_t, part:number, args:string[], segs:string[]):strin
     let [mark, x, y, rotate, color, font, textSize, bold, italic, baseline, type, text, visible, anchor, id, lock] = args;
     let hidden = visible === '0'?'1':'0'
     bold = bold === "" ? "0" : '1'
-    if(italic === ""){
+    if(italic.trim() === ""){
         italic = "Normal"
     }
     if(Number(rotate) != 0){

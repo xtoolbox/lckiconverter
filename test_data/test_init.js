@@ -8,6 +8,7 @@ let std_footprint = require('./test_std_footprint');
 let std_footprint_sn = require('./test_std_footprint_small_neg');
 // test case for oval drill
 let std_fp_oval_drill = require('./test_std_footprint_oval_drill');
+let std_sym_italic_issue = require('./test_std_symbol_text_italic_with_space');
 
 function getTestData(){
     return {
@@ -20,6 +21,7 @@ function getTestData(){
             std_footprint,
             std_footprint_sn,
             std_fp_oval_drill,
+            std_sym_italic_issue,
         ]
     }
 }
