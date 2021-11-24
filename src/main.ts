@@ -70,7 +70,7 @@ function injectContent () {
             lastMenu = e.getAttribute('menu');
             helpMenu = e as HTMLSpanElement;
         }
-        if(lastMenu){
+        if(lastMenu && lastMenu.includes("common-help")){
             menuBar.appendChild(div);
             helpMenu&&monitor_language(helpMenu);
         }

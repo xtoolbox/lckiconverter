@@ -110,7 +110,7 @@ export function initStd(onComponent:(uuid:string|null)=>void){
             let r = body.children[i] as HTMLTableRowElement;
             //console.log(r);
             r.onclick = (ev)=>{
-                if(ev.ctrlKey){
+                if(ev.ctrlKey || ev.metaKey){
                     onComponent(r.getAttribute('data-uuid'));
                 }
             }
@@ -120,7 +120,7 @@ export function initStd(onComponent:(uuid:string|null)=>void){
                 e.addedNodes.forEach(n=>{
                     let r = n as HTMLTableRowElement;
                     r.onclick = (ev)=>{
-                        if(ev.ctrlKey){
+                        if(ev.ctrlKey || ev.metaKey){
                             onComponent(r.getAttribute('data-uuid'));
                         }
                     }

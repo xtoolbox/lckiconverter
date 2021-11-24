@@ -68,7 +68,7 @@ function monitorTable(id:string, onComponent:(uuid:string|null, isDevice?:boolea
         let r = body.children[i] as HTMLDivElement;
         //log("ele:", r);
         r.onclick = (ev)=>{
-            if(ev.ctrlKey){
+            if(ev.ctrlKey || ev.metaKey){
                 //log(getCellId(r), r);
                 onComponent(getCellId(r));
             }
@@ -86,7 +86,7 @@ function monitorTable(id:string, onComponent:(uuid:string|null, isDevice?:boolea
                         for(let i =0; i<bd.children.length;i++){
                             let r = bd.children[i] as HTMLDivElement;
                             r.onclick = (ev)=>{
-                                if(ev.ctrlKey){
+                                if(ev.ctrlKey || ev.metaKey){
                                     //log(getCellId(r), r);
                                     onComponent(getCellId(r), true);
                                 }
@@ -106,7 +106,7 @@ function monitorTable(id:string, onComponent:(uuid:string|null, isDevice?:boolea
             e.addedNodes.forEach(n=>{
                 let r = n as HTMLDivElement;
                 r.onclick = (ev)=>{
-                    if(ev.ctrlKey){
+                    if(ev.ctrlKey || ev.metaKey){
                         //log(getCellId(r), r);
                         onComponent(getCellId(r));
                     }
