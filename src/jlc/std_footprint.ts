@@ -302,10 +302,14 @@ function parse_PAD(box:BBox_t, args:string[], segs:string[]):kifp_element[]
         padType = "np_thru_hole"
     }
     let drill:kifp_element[] = ['drill'];
+    let drillX = toMM(holeRadius)*2;
+    let drillY = toMM(holeLength);
     if(Number(holeLength)){
-        drill.push('oval', toMM(holeRadius)*2, toMM(holeLength));
+        let t = (Number(w)<Number(h)) != (drillX < drillY);
+        if(t)drill.push('oval', drillY, drillX);
+        else drill.push('oval', drillX, drillY);
     }else{
-        drill.push(toMM(holeRadius)*2);
+        drill.push(drillX);
     }
     let polyParam:kifp_element[] = [];
     if(shape == "ELLIPSE"){
@@ -483,7 +487,7 @@ function parse_TRACK(box:BBox_t, args:string[], segs:string[]):kifp_element[]
         pts.push(SvgPoint(cap[0], cap[1]));
         return r;
     })
-    return kifp_line(box, layer, pts, true);
+    return kifp_line(box, layer, pts, true, penWidth);
 }
 
 interface SVGNodeInfo
