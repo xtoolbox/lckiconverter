@@ -52,7 +52,7 @@ export function j2k_string(str:string):string
     return str;
 }
 
-const ratio = 5;
+const ratio = 10;
 function j2k_coord(box:BBox_t, x:number|string, y:number|string):string
 {
     x = Number(x) - box.x;
@@ -72,7 +72,7 @@ function j2k_font_size(pt:number|string):number
         pt = Number(pt);
         if(pt < 1) pt = 7;
     }
-    return Math.floor(Number(pt)*(30.0/7.0) + 0.5);
+    return Math.floor(Number(pt)*(50.0/7.0) + 0.5);
 }
 
 function j2k_line_width(w:string|number):number
