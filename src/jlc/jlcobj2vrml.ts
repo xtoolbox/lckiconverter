@@ -64,7 +64,7 @@ function Mtl2VRML(mtl:Mtl):string
         ambientIntensity 0.27
         diffuseColor ${mtl.Kd[0]} ${mtl.Kd[1]} ${mtl.Kd[2]}
         specularColor ${mtl.Ks[0]} ${mtl.Ks[1]} ${mtl.Ks[2]}
-        emissiveColor ${mtl.Ka[0]} ${mtl.Ka[1]} ${mtl.Ka[2]}
+        emissiveColor 0 0 0
         shininess 0.70
         transparency ${1-mtl.d}
         }
