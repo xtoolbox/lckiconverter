@@ -301,18 +301,29 @@ function parse_PAD(box:CollectBBox, data:any[]):kifp_element[]
             padType = "np_thru_hole"
         }
     }
-    if(holeRotate){
-        kifp_log("Warning: hole rotate is not support, ignore it");
-    }
+
     if((padShapes as []).length > 0){
         kifp_log("Warning: Different pad shape on layers is not support, ignore it");
     }
 
     let drills:kifp_element[] = [];
+    let drillPadParam:number[] = [];
     if(padType != "smd" && holeShape){
         let drill:kifp_element[] = ['drill'];
         if(holeShape[0] == 'SLOT'){
-            drill.push('oval', jp2kifp_MM(holeShape[1]), jp2kifp_MM(holeShape[2]));
+            if(holeRotate == 0 || holeRotate == 180){
+                drill.push('oval', jp2kifp_MM(holeShape[1]), jp2kifp_MM(holeShape[2]));
+            }else if(false){//holeRotate == 90 || holeRotate == 270){
+                drill.push('oval', jp2kifp_MM(holeShape[2]), jp2kifp_MM(holeShape[1]));
+            }else{
+                kifp_log("Warning: Convert free rotate hole to a new pad", holeRotate);
+                let d = holeShape[1];
+                if(d > holeShape[2]) d = holeShape[2];
+                drill.push(jp2kifp_MM(d));
+                drillPadParam = [
+                    Number(holeShape[1]), Number(holeShape[2]), Number(holeRotate)
+                ];
+            }
         }else{
             drill.push(jp2kifp_MM(holeShape[1]));
         }
@@ -359,6 +370,20 @@ function parse_PAD(box:CollectBBox, data:any[]):kifp_element[]
     if(shape != 'custom'){
         updateCircleBBox({x:x,y:y}, w>h?w:h, box);
     }
+
+    let drillPad:kifp_element[] = [];
+    if(drillPadParam.length > 0){
+        drillPad = [true,[
+            "pad", 
+            fp_string(number), 
+            padType,
+            "oval",
+            jp2fp_coord(box.box,  {x:Number(x),y:Number(y)},'at', drillPadParam[2] + rotate),
+            jp2kifp_size(drillPadParam[0]+4,drillPadParam[1]+4),
+            ['drill', 'oval', jp2kifp_MM(drillPadParam[0]), jp2kifp_MM(drillPadParam[1])],
+            ["layers", ...layers]
+        ]];
+    }
     
     let padData = [
         "pad", 
@@ -381,8 +406,7 @@ function parse_PAD(box:CollectBBox, data:any[]):kifp_element[]
     if(paste){
         padData.push(['solder_paste_margin', jp2kifp_MM(paste)])
     }
-
-    return [padData, true];
+    return [padData, ...drillPad, true];
 }
 
 function jp2fp_line(cbox:CollectBBox, layer:string, pts:SvgPoint[], split?:boolean, width?:number|string):kifp_element[]

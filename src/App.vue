@@ -7,7 +7,7 @@
   <div id="kicadhelperRight" @mousedown.prevent="rightDown" :style="{height:''+(dialogGeo.height - 25)+'px', left:''+(dialogGeo.width-5)+'px'}"></div>
   <div id="kicadhelperBottom" @mousedown.prevent="bottomDown" :style="{top:''+(dialogGeo.height-10)+'px'}"></div>
 
-  <el-tag style="float:left;" size='small' effect="dark"> LC-KiCad{{tr[' Converter']}} {{tr[mode]}}{{tr[' Mode']}} V1.3</el-tag>
+  <el-tag style="float:left;" size='small' effect="dark"> LC-KiCad{{tr[' Converter']}} {{tr[mode]}}{{tr[' Mode']}} V1.4</el-tag>
   <el-button style="float:left; " size='mini' type="success" title="Download selected component" @click="download">{{tr['Download']}}</el-button>
   <el-button style="float:right; " size='mini' icon="el-icon-close" @click="()=>$toggleVisible()"/>
   <a :href="tr['http://lckicad-en.xtoolbox.org']" style="float:right;" target="_blank">{{tr['Help']}}</a>
