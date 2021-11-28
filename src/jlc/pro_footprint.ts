@@ -313,7 +313,7 @@ function parse_PAD(box:CollectBBox, data:any[]):kifp_element[]
         if(holeShape[0] == 'SLOT'){
             if(holeRotate == 0 || holeRotate == 180){
                 drill.push('oval', jp2kifp_MM(holeShape[1]), jp2kifp_MM(holeShape[2]));
-            }else if(false){//holeRotate == 90 || holeRotate == 270){
+            }else if(holeRotate == 90 || holeRotate == 270){
                 drill.push('oval', jp2kifp_MM(holeShape[2]), jp2kifp_MM(holeShape[1]));
             }else{
                 kifp_log("Warning: Convert free rotate hole to a new pad", holeRotate);
