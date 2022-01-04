@@ -60,6 +60,13 @@ export interface BBox_t
     height:number
 }
 
+export interface ParsedData
+{
+    name:string
+    fields:{key:string,value:string}[]
+    pins:{[key:string]:string}
+}
+
 export interface JLCComp_t
 {
     docType:JLCDocType
@@ -92,4 +99,5 @@ export interface JLCComp_t
     }
     packageDetail?:JLCComp_t
     device?:JLCDevice_t      // pro component link to it's device
+    parsedData?:ParsedData
 }

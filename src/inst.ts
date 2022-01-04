@@ -162,6 +162,11 @@ function check_host(){
 
 let g_compMap = new Map<string, any>();
 
+export function clear_comp_map(){
+    g_compMap.clear();
+    return g_compMap;
+}
+
 interface CompRes
 {
     result:JLCComp_t
@@ -234,13 +239,19 @@ export function getStdComponent(uuid:string, compRow:CompRow_t|CompRow_t[], devi
                     axios.get<string>(std3DPrefix + dataStr.head?.uuid)
                     .then(({data})=>{
                         rowShadow.data3d = data;
+                        resolve(true);
                     })
+                    .catch(e=>reject(e));
                 }else if(device && comp['3d_model_uuid']){
                     let uuid_3d = comp['3d_model_uuid'];
                     axios.get<string>(pro3DPrefix + uuid_3d)
                     .then(({data})=>{
                         rowShadow.data3d = data;
+                        resolve(true);
                     })
+                    .catch(e=>reject(e));
+                }else{
+                    resolve(false);
                 }
             }else if(comp.docType == JLCDocType.Footprint){
                 if(compRow instanceof Array){
@@ -251,10 +262,14 @@ export function getStdComponent(uuid:string, compRow:CompRow_t|CompRow_t[], devi
                 compRow.footprint.device = device;
                 let shadowRow = compRow;
                 if(comp.dataStr instanceof Object && comp.dataStr.head?.uuid_3d){
-                    getStdComponent(comp.dataStr.head?.uuid_3d, compRow, device);
+                    getStdComponent(comp.dataStr.head?.uuid_3d, compRow, device)
+                    .then(e=>resolve(e))
+                    .catch(e=>reject(e));
                 }else if(comp.device?.attributes['3D Model'] || comp.model_3d?.uri){
                     let uuid_3d = comp.device?.attributes['3D Model'] || comp.model_3d?.uri;
-                    getStdComponent(uuid_3d, compRow, device).catch(e=>{
+                    getStdComponent(uuid_3d, compRow, device)
+                    .then(e=>resolve(e))
+                    .catch(e=>{
                         // maybe direct 3D content
                         axios.get<string>(pro3DPrefix + uuid_3d)
                         .then(({data})=>{
@@ -263,8 +278,12 @@ export function getStdComponent(uuid:string, compRow:CompRow_t|CompRow_t[], devi
                                 title:comp.device?.attributes['3D Model Title'] || comp.model_3d?.title || "Unknown", 
                             dataStr:""};
                             shadowRow.data3d = data;
+                            resolve(true)
                         })
+                        .catch(e=>reject(e))
                     });
+                }else{
+                    resolve(false);
                 }
             }else if(comp.docType == JLCDocType.Symbol){
                 if(compRow instanceof Array){
@@ -274,15 +293,23 @@ export function getStdComponent(uuid:string, compRow:CompRow_t|CompRow_t[], devi
                 compRow.symbol = comp;
                 compRow.symbol.device = device;
                 if(comp.dataStr instanceof Object && comp.dataStr.head?.puuid){
-                    getStdComponent(comp.dataStr.head?.puuid, compRow, device);
+                    getStdComponent(comp.dataStr.head?.puuid, compRow, device)
+                    .then(e=>resolve(e))
+                    .catch(e=>reject(e));
                 }else if(compRow.symbol.device && compRow.symbol.device.footprint?.uuid){
-                    getStdComponent(compRow.symbol.device.footprint?.uuid, compRow, device);
+                    getStdComponent(compRow.symbol.device.footprint?.uuid, compRow, device)
+                    .then(e=>resolve(e))
+                    .catch(e=>reject(e));
+                }else{
+                    resolve(false);
                 }
+            }else{
+                resolve(false);
             }
             if(!compRow){
                 log("unsupport comp type", comp.docType, comp.title);
             }
-            resolve(true);
+            //resolve(true);
         })
         .catch((e)=>{
             reject(e);

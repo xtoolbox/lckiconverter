@@ -66,4 +66,5 @@ export const transTable : any = {
   ' Converter':'转换器',
   'Help':'帮助',
   'http://lckicad-en.xtoolbox.org':'http://lckicad.xtoolbox.org',
+  'Load Netlist':'转换网表'
 };

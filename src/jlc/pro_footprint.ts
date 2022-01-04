@@ -30,7 +30,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { BBox_t, JLCComp_t, JLCDevice_t} from "./component";
+import { BBox_t, JLCComp_t, JLCDevice_t, ParsedData} from "./component";
 import { kifp_to_string, kifp_element, fp_name, fp_timestamp, fp_string, rotatePoint, isASCII, ki3d_info } from "./std_footprint";
 import { SvgPoint, svg_arc_to_path, svg_path } from "./svg";
 
@@ -120,6 +120,11 @@ export function convert_pro_footprint(comp:JLCComp_t):string
     let box = {x:0,y:0, width:100, height:100};
     let cbox:CollectBBox = {box:box, x1:1000, y1:1000, x2:-1000, y2:-1000}
     let fontMap = new Map<string,any[]>();
+    let parsedData : ParsedData = {
+        pins:{},
+        name:comp.display_title||comp.title,
+        fields:[],
+    }
 
     let res:kifp_element[] = [
         "module",
@@ -185,6 +190,7 @@ export function convert_pro_footprint(comp:JLCComp_t):string
     if(comp.device){
         res.push(...parse_3DModel(comp.device, cbox.isThru?true:false));
     }
+    comp.parsedData = parsedData;
     res.push(true);
     return kifp_to_string(res);
 }

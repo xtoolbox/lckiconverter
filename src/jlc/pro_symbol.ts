@@ -32,7 +32,7 @@
  */
 
 import { get_footprint_name } from "@/inst";
-import {BBox_t, JLCComp_t, JLCDocType } from "./component";
+import {BBox_t, JLCComp_t, JLCDocType, ParsedData } from "./component";
 import { j2k_fill_color, j2k_string } from "./std_symbol";
 import { get_angle, SvgPoint } from "./svg";
 
@@ -267,10 +267,20 @@ export function convert_pro_symbol(comp:JLCComp_t):string
    let title = comp.display_title||comp.title;
    title = j2k_string(title);
    symbol.v = j2k_string(symbol.v);
+   let parsedData : ParsedData = {
+      pins:{},
+      fields:[],
+      name:title
+   }
 
    function text_field(id:number, data:{x:number,y:number,v:string}, visible:boolean = true, fieldName?:string):string{
       let text = j2k_string(data.v);
       if(text === "") text = "~";
+      if(id == 3){
+         //parsedData.fields.push({key:"datasheet", value:text});
+      }else if(id>3 && fieldName){
+         parsedData.fields.push({key:fieldName, value:text});
+      }
       return 'F' + id + ' "' + text + '" ' + jp2k_coord(box, data.x, data.y) + " 50 H " +(visible?"V":"I") 
       + " C CNN" + (fieldName?(' "'+fieldName+'"'):"") + "\n"
    }
@@ -290,10 +300,12 @@ export function convert_pro_symbol(comp:JLCComp_t):string
    res += "DRAW\n"
    res += drawRes;
    pinList.forEach(p=>{
+      parsedData.pins[String(p.number)] = p.name;
       res += parse_pin(box, p) + "\n";
    })
    res += "ENDDRAW\n"
    res += "ENDDEF\n"
+   comp.parsedData = parsedData;
    return res;
 }
 

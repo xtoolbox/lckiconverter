@@ -40,6 +40,8 @@ import { convert_std_footprint } from "@/jlc/std_footprint";
 import { convert_pro_symbol } from "./jlc/pro_symbol";
 import { convert_pro_footprint } from "./jlc/pro_footprint";
 import { objmtl2vrml } from './jlc/jlcobj2vrml';
+import { gen_net_list, NetListMap } from "./jlc/jlc_netlist";
+import { temp_kicad_pcb } from "./jlc/ki_template";
 
 
 let g_prefix = "";
@@ -53,7 +55,7 @@ function log(...args:any)
     console.log('[LCKi] Cvt:', ...args);
 }
 
-export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t[], setProgress:(percent:number)=>void, mode:string)
+export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t[], setProgress:(percent:number)=>void, mode:string, netList?:NetListMap)
 {
     let zip = new JSZip();
     let footprint = zip.folder(namePrefix+'.pretty');
@@ -65,15 +67,15 @@ export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t
     let fpFolder = footprint;
     let folder3d = shape3d;
     // collect lib
-    let t = new Map<string, boolean>();
+    let t = new Map<string, JLCComp_t>();
     let symbolLib = library_head;
     items.forEach((comp)=>{
         let cvtName = ""
         try{
             if(comp.symbol && (!t.has(comp.symbol.uuid))){
                 cvtName = "symbol:" + comp.symbol.display_title || comp.symbol.title;
-                t.set(comp.symbol.uuid,true);
                 let r = convertData(comp.symbol);
+                t.set(comp.symbol.uuid,comp.symbol);
                 symbolLib += r.content + "\n";
             }
         }catch(e){
@@ -82,8 +84,8 @@ export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t
         try{
             if(comp.footprint && (!t.has(comp.footprint.uuid))){
                 cvtName = "footprint:" + comp.footprint.display_title || comp.footprint.title;
-                t.set(comp.footprint.uuid,true);
                 let r = convertData(comp.footprint);
+                t.set(comp.footprint.uuid,comp.footprint);
                 fpFolder.file(r.filename, r.content);
             }
         }catch(e){
@@ -92,9 +94,10 @@ export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t
         try{
             if(comp.model3d && (!t.has(comp.model3d.uuid)) && comp.data3d){
                 cvtName = "3D model:" + comp.model3d.display_title || comp.model3d.title;
-                t.set(comp.model3d.uuid,true);
                 let r = convertData(comp.data3d, comp.model3d.display_title || comp.model3d.title, tryStep,
                     mode + ":" + (comp.model3d.uuid||""));
+                t.set(comp.model3d.uuid,{docType:JLCDocType.Model3D, title:comp.model3d.display_title || comp.model3d.title,
+                                        uuid:comp.model3d.uuid, dataStr:comp.data3d});
                 folder3d.file(r.filename, r.content);
             }
         }catch(e){
@@ -109,6 +112,10 @@ export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t
     zip.file('fp-lib-table', `(fp_lib_table
   (lib (name ${namePrefix})(type KiCad)(uri \${KIPRJMOD}/${namePrefix}.pretty)(options "")(descr ""))
 )`)
+    if(netList){
+        zip.file(namePrefix+".net", gen_net_list(netList, namePrefix, t));
+        zip.file(namePrefix+".kicad_pcb", temp_kicad_pcb);
+    }
     zip.generateAsync({type:"blob"}, (meta)=>{
         setProgress(meta.percent);
     }).then((blob)=>{

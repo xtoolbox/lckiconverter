@@ -7,8 +7,9 @@
   <div id="kicadhelperRight" @mousedown.prevent="rightDown" :style="{height:''+(dialogGeo.height - 25)+'px', left:''+(dialogGeo.width-5)+'px'}"></div>
   <div id="kicadhelperBottom" @mousedown.prevent="bottomDown" :style="{top:''+(dialogGeo.height-10)+'px'}"></div>
 
-  <el-tag style="float:left;" size='small' effect="dark"> LC-KiCad{{tr[' Converter']}} {{tr[mode]}}{{tr[' Mode']}} V1.4</el-tag>
+  <el-tag style="float:left;" size='small' effect="dark"> LC-KiCad{{tr[' Converter']}} {{tr[mode]}}{{tr[' Mode']}} V2.0</el-tag>
   <el-button style="float:left; " size='mini' type="success" title="Download selected component" @click="download">{{tr['Download']}}</el-button>
+  <el-button v-if='mode=="Pro"' style="float:left; " size='mini' type="success" title="Load lceda pro's netlist" @click="LoadNetList">{{tr['Load Netlist']}}</el-button>
   <el-button style="float:right; " size='mini' icon="el-icon-close" @click="()=>$toggleVisible()"/>
   <a :href="tr['http://lckicad-en.xtoolbox.org']" style="float:right;" target="_blank">{{tr['Help']}}</a>
 
@@ -78,6 +79,7 @@ import {toggleVisible, initStd, loadDlgSetting, saveDlgSetting, DialogGeo_t, def
   CompRow_t,
   getStdComponent
 } from './inst'
+import {open_net_list, parse_net_list} from './jlc/jlc_netlist'
 import ChipView from './components/ChipView.vue'
 import { getProComponent, initPro } from './jlcpro';
 import {downloadData} from './convert'
@@ -128,7 +130,7 @@ export default defineComponent({
     });
 
     let tableData = ref<CompRow_t[]>([]);
-    if(document.URL.includes('pro.lceda.cn')){
+    if(document.URL.includes('pro.lceda.cn') || document.URL.includes('localhost')){
       mode.value = "Pro";
     }
 
@@ -273,9 +275,22 @@ export default defineComponent({
       },100);
     }
 
+    function LoadNetList(){
+      tableData.value = [];
+      open_net_list()
+      .then(netlist=>{
+        parse_net_list(netlist, tableData.value)
+        .then(e=>{
+          downloadData(dialogGeo.value.prefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
+            progress.value = percent;
+          }, mode.value, netlist);
+        });
+      });
+    }
+
     return {count, mode, tableData, removeRow, dialogGeo, progress,theRef,
     titleDown, leftDown, rightDown, bottomDown, show3D, preview3D,
-    rowData, resizing, download, showHelp, tr}
+    rowData, resizing, download, showHelp, tr, LoadNetList}
   },
 });
 </script>
