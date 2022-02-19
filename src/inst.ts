@@ -321,9 +321,10 @@ export function getStdComponent(uuid:string, compRow:CompRow_t|CompRow_t[], devi
                 compRow.symbol = comp;
                 // 获取元件datasheet的url
                 if (compRow.symbol.szlcsc?.id) {
+                    compRow.symbol.itemUrl = stdItemPrefix + compRow.symbol.szlcsc.id + '.html'
                     chrome.runtime.sendMessage({
                         contentScriptQuery: 'fetchUrl',
-                        url: stdItemPrefix + compRow.symbol.szlcsc.id + '.html'
+                        url: compRow.symbol.itemUrl
                     },
                         response => {
                             let pdfUrlExec = /downloadFileNoRemark\('(https:\/\/.*\.pdf)/.exec(response);

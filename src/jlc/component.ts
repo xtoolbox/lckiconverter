@@ -102,4 +102,5 @@ export interface JLCComp_t
     device?:JLCDevice_t      // pro component link to it's device
     parsedData?:ParsedData
     datasheetUrl?:string
+    itemUrl?:string
 }

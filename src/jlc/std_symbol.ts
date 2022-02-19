@@ -162,7 +162,7 @@ export function convert_std_symbol(comp:JLCComp_t):string
     res += text_field(3, (comp as any).datasheetUrl || "", headLine+30, false);
     res += text_field(4, (comp as any).szlcsc?.number || (comp as any).lcsc?.number || "", headLine+50, false, 'SuppliersPartNumber');
     res += text_field(5, "std:"+(comp.uuid|| ""), headLine+50, false, 'uuid');
-    res += text_field(6, (comp as any).szlcsc?.url || (comp as any).lcsc?.url || "", headLine+30, false, 'url');
+    res += text_field(6, (comp as any).szlcsc?.url || (comp as any).lcsc?.url || (comp as any).itemUrl || "", headLine+30, false, 'url');
     res += "DRAW\n"
     res += drawRes;
     res += "ENDDRAW\n"
