@@ -1,27 +1,27 @@
-/*       
- *      _      _____ _  ___  _____                          _            
- *     | |    / ____| |/ (_)/ ____|                        | |           
- *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __ 
+/*
+ *      _      _____ _  ___  _____                          _
+ *     | |    / ____| |/ (_)/ ____|                        | |
+ *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __
  *     | |   | |    |  < | | |    / _ \| '_ \ \ / / _ \ '__| __/ _ \ '__|
- *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |   
- *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|   
- *                                                                 
+ *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |
+ *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|
+ *
  *
  * LCKiConverter - a browser extension to convert LCEDA (aka EasyEDA) component to KiCad
- * 
+ *
  * Copyright (c) 2021 XToolBox  - admin@xtoolbox.org
  *                         http://lckicad.xtoolbox.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,7 +31,7 @@
  * SOFTWARE.
  */
 
-import { getPrefix } from '@/convert';
+import { getPrefix, getModelPrefix } from '@/convert';
 import { BBox_t, JLCComp_t, JLCDocType } from "@/jlc/component";
 import { svg_path, SvgPoint, svg_solve_arc } from './svg';
 
@@ -158,7 +158,7 @@ export function convert_std_footprint(comp:JLCComp_t):string
         kifp_text("reference", box, "REF**", "F.SilkS", SvgPoint(box.x+0, box.y-10)), true,
         kifp_text("value", box, "std:"+comp.uuid  , "F.Fab", SvgPoint(box.x+0, box.y-0)), true,
     ];
-    
+
     comp.dataStr.shape?.forEach(s=>{
         res.push(...kifp_parse_shape(box, s, comp));
     })
@@ -289,7 +289,7 @@ export function rotatePoint(pt:SvgPoint, angle:string|number, org:SvgPoint = Svg
 
 function parse_PAD(box:BBox_t, args:string[], segs:string[]):kifp_element[]
 {
-    let [shape, x, y, w, h, layerId, net, number, 
+    let [shape, x, y, w, h, layerId, net, number,
         holeRadius, points, rotate, id,
         holeLength, holePoints, plated, locked, u1, u2] = args;
     let layers = getLayers(layerId);
@@ -344,8 +344,8 @@ function parse_PAD(box:BBox_t, args:string[], segs:string[]):kifp_element[]
         kifp_log("Warning: Unknown pin shape " + shape);
     }
     let padData = [
-        "pad", 
-        fp_string(number), 
+        "pad",
+        fp_string(number),
         padType,
         shape,
         kifp_coord(box, {x:Number(x),y:Number(y)},'at', rotate),
@@ -362,7 +362,7 @@ export function isASCII(str:string):boolean {
 }
 
 const fontHeightRatio = 0.75;
-function kifp_text(type:"reference"|"value"|"user", box:BBox_t, text:string, 
+function kifp_text(type:"reference"|"value"|"user", box:BBox_t, text:string,
         layer:string, pos:SvgPoint, rotate:string|number=0, fontSize:string|number=3.937/fontHeightRatio, penWidth:string|number=0.590,
         hide?:boolean, ):kifp_element
 {
@@ -418,8 +418,8 @@ function parse_VIA(box:BBox_t, args:string[], segs:string[]):kifp_element[]
 {
     let [x, y, d, net, holeRadius, id, locked] = args;
     let padData = [
-        "pad", 
-        fp_string(""), 
+        "pad",
+        fp_string(""),
         "thru_hole",
         "circle",
         kifp_coord(box, {x:Number(x),y:Number(y)},'at', 0),
@@ -435,8 +435,8 @@ function parse_HOLE(box:BBox_t, args:string[], segs:string[]):kifp_element[]
     let [x, y, r, id, locked] = args;
     let d = Number(r)*2;
     let padData = [
-        "pad", 
-        fp_string(""), 
+        "pad",
+        fp_string(""),
         "np_thru_hole",
         "circle",
         kifp_coord(box, {x:Number(x),y:Number(y)},'at', 0),
@@ -505,12 +505,12 @@ interface SVGNodeInfo
 export function ki3d_info(name:string, pos:number[], scale:number[], rotate:number[]):kifp_element[]
 {
     return [[
-        'model', fp_string('${KIPRJMOD}/'+getPrefix()+'.3dshapes'+'/'+name+'.step'),true,
+        'model', fp_string('$' + getModelPrefix() + '/'+getPrefix()+'.3dshapes'+'/'+name+'.step'),true,
         ['offset', ['xyz', ...pos]],
         ['scale', ['xyz', ...scale]],
         ['rotate', ['xyz', ...rotate]],true
     ],[
-        'model', fp_string('${KIPRJMOD}/'+getPrefix()+'.3dshapes'+'/'+name+'.wrl'),true,
+        'model', fp_string('$' + getModelPrefix() + '/'+getPrefix()+'.3dshapes'+'/'+name+'.wrl'),true,
         ['offset', ['xyz', ...pos]],
         ['scale', ['xyz', ...scale]],
         ['rotate', ['xyz', ...rotate]],true

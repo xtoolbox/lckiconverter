@@ -1,5 +1,5 @@
 const defSetting = {
-  x:400, y:0, width:400, height:400, visible:false, prefix:"kicad_lceda", tryStep:false
+  x:400, y:0, width:400, height:400, visible:false, prefix:"kicad_lceda", modelPrefix:"{KIPRJMOD}", tryStep:false
 };
 
 function saveSetting(){
@@ -10,7 +10,8 @@ function saveSetting(){
       height:Number(document.getElementById('posH').value),
       visible:document.getElementById('Visible').checked,
       tryStep:document.getElementById('tryStep').checked,
-      prefix:document.getElementById("prefix").value
+      prefix:document.getElementById("prefix").value,
+      modelPrefix:document.getElementById("modelPrefix").value
     }
     chrome.storage.sync.set(set);
     console.log("save set", set);
@@ -25,6 +26,7 @@ function loadSetting(){
         document.getElementById('Visible').checked = data.visible;
         document.getElementById('tryStep').checked = data.tryStep;
         document.getElementById('prefix').value = data.prefix;
+        document.getElementById('modelPrefix').value = data.modelPrefix;
     });
 }
 

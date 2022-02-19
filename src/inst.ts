@@ -70,11 +70,12 @@ export interface DialogGeo_t
     height:number
     visible:boolean
     prefix:string
+    modelPrefix:string
     tryStep:boolean
 }
 
 export const defSetting : DialogGeo_t = {
-    x:400, y:0, width:400, height:400, visible:false, prefix:"kicad_lceda", tryStep:false
+    x:400, y:0, width:400, height:400, visible:false, prefix:"kicad_lceda", modelPrefix:"{KIPRJMOD}", tryStep:false
 };
 
 export function loadDlgSetting(): Promise<DialogGeo_t>

@@ -277,7 +277,7 @@ export default defineComponent({
 
     let progress = ref(0);
     function download(){
-      downloadData(dialogGeo.value.prefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
+      downloadData(dialogGeo.value.prefix, dialogGeo.value.modelPrefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
         progress.value = percent;
       }, mode.value);
     }
@@ -300,7 +300,7 @@ export default defineComponent({
       .then(netlist=>{
         parse_net_list(netlist, tableData.value)
         .then(e=>{
-          downloadData(dialogGeo.value.prefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
+          downloadData(dialogGeo.value.prefix, dialogGeo.value.modelPrefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
             progress.value = percent;
           }, mode.value, netlist);
         });
