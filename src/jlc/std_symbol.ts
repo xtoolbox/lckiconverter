@@ -1,27 +1,27 @@
-/*       
- *      _      _____ _  ___  _____                          _            
- *     | |    / ____| |/ (_)/ ____|                        | |           
- *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __ 
+/*
+ *      _      _____ _  ___  _____                          _
+ *     | |    / ____| |/ (_)/ ____|                        | |
+ *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __
  *     | |   | |    |  < | | |    / _ \| '_ \ \ / / _ \ '__| __/ _ \ '__|
- *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |   
- *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|   
- *                                                                 
+ *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |
+ *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|
+ *
  *
  * LCKiConverter - a browser extension to convert LCEDA (aka EasyEDA) component to KiCad
- * 
+ *
  * Copyright (c) 2021 XToolBox  - admin@xtoolbox.org
  *                         http://lckicad.xtoolbox.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -115,7 +115,7 @@ interface PinDisplayInfo{
 export function convert_std_symbol(comp:JLCComp_t):string
 {
     if(typeof comp.dataStr === 'string') return "# Pro data " + comp.dataStr;
-    
+
     let box = {x:comp.dataStr.head?.x||0,y:comp.dataStr.head?.y||0, width:100, height:100};
     let headLine = comp.dataStr.BBox?.y || 0;
     headLine -= box.y;
@@ -159,9 +159,10 @@ export function convert_std_symbol(comp:JLCComp_t):string
     res += text_field(0, pre, headLine-10);
     res += text_field(1, title, headLine-30);
     res += text_field(2, get_footprint_name(comp.dataStr.head?.puuid||""), headLine+10, false);
-    res += text_field(3, (comp as any).szlcsc?.url || (comp as any).lcsc?.url || "", headLine+30, false);
+    res += text_field(3, (comp as any).datasheetUrl || "", headLine+30, false);
     res += text_field(4, (comp as any).szlcsc?.number || (comp as any).lcsc?.number || "", headLine+50, false, 'SuppliersPartNumber');
     res += text_field(5, "std:"+(comp.uuid|| ""), headLine+50, false, 'uuid');
+    res += text_field(6, (comp as any).szlcsc?.url || (comp as any).lcsc?.url || "", headLine+30, false, 'url');
     res += "DRAW\n"
     res += drawRes;
     res += "ENDDRAW\n"
@@ -186,7 +187,7 @@ function parse_symbol_shape(box:BBox_t, shape:string, pin:PinDisplayInfo, part:n
 {
     let [seg, ...segs] = shape.split('^^');
     let [cmd, ...args] = seg.split('~');
-    
+
     if(cmd == "P"){
         return StdSymbolShape.P(box, part, args, segs, pin);
     }
@@ -226,7 +227,7 @@ function parse_pin(box:BBox_t, part:number, args:string[], segs:string[], pin:Pi
         pinlength += j2k_size(3);
     }
     let pinType = ['I','I','O','B','W'][Number(elecType)] || 'I';
-    return "X " + j2k_string(nameText) + " " + j2k_string(numText) + " " + j2k_coord(box, pinX, pinY) + " " + pinlength + " " + 
+    return "X " + j2k_string(nameText) + " " + j2k_string(numText) + " " + j2k_coord(box, pinX, pinY) + " " + pinlength + " " +
     rotate + " " + sizenum + " " + sizename + " " + part + " 1 " + pinType + " " + shapePrefix + shape;
 }
 

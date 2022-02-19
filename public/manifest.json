@@ -13,7 +13,9 @@
     "48": "/images/kicad_logo48.png",
     "128": "/images/kicad_logo128.png"
   },
-
+  "host_permissions": [
+    "https://*.szlcsc.com/"
+  ],
   "content_scripts": [
 		{
 			"matches": ["https://*.lceda.cn/editor*", "https://*.easyeda.com/editor*"],
@@ -22,12 +24,12 @@
 			"run_at": "document_idle"
 		}
   ],
-  
+
   "web_accessible_resources": [ {
       "matches":["https://*.lceda.cn/*", "https://*.easyeda.com/*"],
       "resources":["inject.js", "fonts/element-icons.ttf", "fonts/element-icons.woff"]
     }
   ],
-  
+
   "options_page": "options.html"
 }
