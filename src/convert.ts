@@ -1,27 +1,27 @@
-/*       
- *      _      _____ _  ___  _____                          _            
- *     | |    / ____| |/ (_)/ ____|                        | |           
- *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __ 
+/*
+ *      _      _____ _  ___  _____                          _
+ *     | |    / ____| |/ (_)/ ____|                        | |
+ *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __
  *     | |   | |    |  < | | |    / _ \| '_ \ \ / / _ \ '__| __/ _ \ '__|
- *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |   
- *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|   
- *                                                                 
+ *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |
+ *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|
+ *
  *
  * LCKiConverter - a browser extension to convert LCEDA (aka EasyEDA) component to KiCad
- * 
+ *
  * Copyright (c) 2021 XToolBox  - admin@xtoolbox.org
  *                         http://lckicad.xtoolbox.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,9 +45,13 @@ import { temp_kicad_pcb } from "./jlc/ki_template";
 
 
 let g_prefix = "";
+let g_modelPrefix = "";
 export function getPrefix()
 {
     return g_prefix;
+}
+export function getModelPrefix() {
+    return g_modelPrefix;
 }
 
 function log(...args:any)
@@ -55,12 +59,13 @@ function log(...args:any)
     console.log('[LCKi] Cvt:', ...args);
 }
 
-export function downloadData(namePrefix:string, tryStep:boolean, items:CompRow_t[], setProgress:(percent:number)=>void, mode:string, netList?:NetListMap)
+export function downloadData(namePrefix:string, modelPrefix:string, tryStep:boolean, items:CompRow_t[], setProgress:(percent:number)=>void, mode:string, netList?:NetListMap)
 {
     let zip = new JSZip();
     let footprint = zip.folder(namePrefix+'.pretty');
     let shape3d = zip.folder(namePrefix+'.3dshapes');
     g_prefix = namePrefix;
+    g_modelPrefix = modelPrefix;
     if(!footprint || !shape3d){
         return;
     }
@@ -178,7 +183,7 @@ export function convertData(data:JLCComp_t|string, name?:string, tryStep?:boolea
     }
 }
 
-const library_head = 
+const library_head =
 `EESchema-LIBRARY Version 2.4
 #encoding utf-8
 `

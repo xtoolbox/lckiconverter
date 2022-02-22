@@ -25,7 +25,7 @@
     <el-table-column
       prop="symbol"
       :label="tr['Symbol']"
-      :width="(dialogGeo.width-10)/3.5">
+      :width="(dialogGeo.width-10)/6">
         <template #default="scope">
           <el-tag size="mini" effect="dark">
             {{scope.row.symbol?(scope.row.symbol.display_title||scope.row.symbol.title):"<none>"}}
@@ -33,9 +33,22 @@
         </template>
     </el-table-column>
     <el-table-column
+      prop="datasheet"
+      :label="tr['DataSheet']"
+      :width="(dialogGeo.width-10)/3.5">
+        <template #default="scope">
+          <el-button v-if="scope.row.symbol.datasheetUrl" size='mini' type="success" @click="()=>showDataSheet(scope.row.symbol.datasheetUrl)">
+            {{scope.row.symbol.datasheetUrl}}
+          </el-button>
+          <el-tag v-else size="mini" effect="dark">
+            {{"<none>"}}
+          </el-tag>
+        </template>
+    </el-table-column>
+    <el-table-column
       prop="footprint"
       :label="tr['Footprint']"
-      :width="(dialogGeo.width-10)/3.5">
+      :width="(dialogGeo.width-10)/5">
         <template #default="scope">
           <el-tag size="mini" effect="dark">
             {{scope.row.footprint?(scope.row.footprint.display_title||scope.row.footprint.title):"<none>"}}
@@ -45,7 +58,7 @@
     <el-table-column
       prop="model3d"
       :label="tr['3D Model']"
-      :width="(dialogGeo.width-10)/3.5">
+      :width="(dialogGeo.width-10)/5">
         <template #default="scope">
           <el-button v-if="scope.row.data3d" size='mini' type="success" @click="()=>preview3D(scope.row)">
             {{scope.row.model3d?(scope.row.model3d.display_title||scope.row.model3d.title):"<none>"}}
@@ -158,7 +171,7 @@ export default defineComponent({
       let xx = (theRef.value as any).$el as HTMLElement;
       let col = xx.getElementsByClassName('el-table__empty-text');
       if(col.length > 0){
-        col[0].innerHTML = 
+        col[0].innerHTML =
         "<b>"+ tr.value['Open component list']+"</b><br>"
         +"<b>" + tr.value['Use [Ctrl]+[Left Click] to select item']+"</b>";
       }
@@ -194,7 +207,7 @@ export default defineComponent({
       dialogGeo.value.x = curGeo.x + dx;
       dialogGeo.value.width = curGeo.width - dx;
     }
-    
+
     function resizeDialogR(e:MouseEvent){
       let dx = e.screenX - lastX;
       let dy = e.screenY - lastY;
@@ -264,7 +277,7 @@ export default defineComponent({
 
     let progress = ref(0);
     function download(){
-      downloadData(dialogGeo.value.prefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
+      downloadData(dialogGeo.value.prefix, dialogGeo.value.modelPrefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
         progress.value = percent;
       }, mode.value);
     }
@@ -275,13 +288,19 @@ export default defineComponent({
       },100);
     }
 
+    function showDataSheet(url:string) {
+        setTimeout(()=>{
+            let w = window.open(url,'','width=800,height=1000, toolbar=no,menubar=no,scrollbars=yes, resizable=no,location=no, status=yes');
+        },100);
+    }
+
     function LoadNetList(){
       tableData.value = [];
       open_net_list()
       .then(netlist=>{
         parse_net_list(netlist, tableData.value)
         .then(e=>{
-          downloadData(dialogGeo.value.prefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
+          downloadData(dialogGeo.value.prefix, dialogGeo.value.modelPrefix, dialogGeo.value.tryStep, tableData.value, (percent)=>{
             progress.value = percent;
           }, mode.value, netlist);
         });
@@ -290,7 +309,7 @@ export default defineComponent({
 
     return {count, mode, tableData, removeRow, dialogGeo, progress,theRef,
     titleDown, leftDown, rightDown, bottomDown, show3D, preview3D,
-    rowData, resizing, download, showHelp, tr, LoadNetList}
+    rowData, resizing, download, showHelp, tr, LoadNetList, showDataSheet}
   },
 });
 </script>

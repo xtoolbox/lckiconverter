@@ -1,27 +1,27 @@
-/*       
- *      _      _____ _  ___  _____                          _            
- *     | |    / ____| |/ (_)/ ____|                        | |           
- *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __ 
+/*
+ *      _      _____ _  ___  _____                          _
+ *     | |    / ____| |/ (_)/ ____|                        | |
+ *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __
  *     | |   | |    |  < | | |    / _ \| '_ \ \ / / _ \ '__| __/ _ \ '__|
- *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |   
- *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|   
- *                                                                 
+ *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |
+ *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|
+ *
  *
  * LCKiConverter - a browser extension to convert LCEDA (aka EasyEDA) component to KiCad
- * 
+ *
  * Copyright (c) 2021 XToolBox  - admin@xtoolbox.org
  *                         http://lckicad.xtoolbox.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,7 +40,7 @@ export enum JLCDocType{
     SubSymbol = 6,
     Model3D = 16,
 }
-  
+
 export interface JLCDevice_t // device in pro mode
 {
     attributes:any
@@ -88,7 +88,8 @@ export interface JLCComp_t
         layers?:string[]
     }|string
     subparts?:JLCComp_t[]
-    szlcsc?:{
+    szlcsc?: {
+        id:number
         number:string
         url:string
     }
@@ -100,4 +101,6 @@ export interface JLCComp_t
     packageDetail?:JLCComp_t
     device?:JLCDevice_t      // pro component link to it's device
     parsedData?:ParsedData
+    datasheetUrl?:string
+    itemUrl?:string
 }

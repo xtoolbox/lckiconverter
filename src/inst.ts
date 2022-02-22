@@ -1,27 +1,27 @@
-/*       
- *      _      _____ _  ___  _____                          _            
- *     | |    / ____| |/ (_)/ ____|                        | |           
- *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __ 
+/*
+ *      _      _____ _  ___  _____                          _
+ *     | |    / ____| |/ (_)/ ____|                        | |
+ *     | |   | |    | ' / _| |     ___  _ ____   _____ _ __| |_ ___ _ __
  *     | |   | |    |  < | | |    / _ \| '_ \ \ / / _ \ '__| __/ _ \ '__|
- *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |   
- *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|   
- *                                                                 
+ *     | |___| |____| . \| | |___| (_) | | | \ V /  __/ |  | ||  __/ |
+ *     |______\_____|_|\_\_|\_____\___/|_| |_|\_/ \___|_|   \__\___|_|
+ *
  *
  * LCKiConverter - a browser extension to convert LCEDA (aka EasyEDA) component to KiCad
- * 
+ *
  * Copyright (c) 2021 XToolBox  - admin@xtoolbox.org
  *                         http://lckicad.xtoolbox.org
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -70,11 +70,12 @@ export interface DialogGeo_t
     height:number
     visible:boolean
     prefix:string
+    modelPrefix:string
     tryStep:boolean
 }
 
 export const defSetting : DialogGeo_t = {
-    x:400, y:0, width:400, height:400, visible:false, prefix:"kicad_lceda", tryStep:false
+    x:400, y:0, width:400, height:400, visible:false, prefix:"kicad_lceda", modelPrefix:"{KIPRJMOD}", tryStep:false
 };
 
 export function loadDlgSetting(): Promise<DialogGeo_t>
@@ -148,6 +149,7 @@ let stdCompPrefix = "https://lceda.cn/api/components/";
 let proCompPrefix = "https://pro.lceda.cn/api/components/";
 let std3DPrefix = "https://lceda.cn/analyzer/api/3dmodel/";
 let pro3DPrefix = "https://modules.lceda.cn/3dmodel/";
+let stdItemPrefix = "https://item.szlcsc.com/";
 
 let g_check_host:boolean = false;
 function check_host(){
@@ -273,15 +275,41 @@ export function getStdComponent(uuid:string, compRow:CompRow_t|CompRow_t[], devi
                         // maybe direct 3D content
                         axios.get<string>(pro3DPrefix + uuid_3d)
                         .then(({data})=>{
-                            shadowRow.model3d = {docType:JLCDocType.Model3D, 
-                                uuid:uuid_3d, 
-                                title:comp.device?.attributes['3D Model Title'] || comp.model_3d?.title || "Unknown", 
+                            shadowRow.model3d = {docType:JLCDocType.Model3D,
+                                uuid:uuid_3d,
+                                title:comp.device?.attributes['3D Model Title'] || comp.model_3d?.title || "Unknown",
                             dataStr:""};
                             shadowRow.data3d = data;
                             resolve(true)
                         })
                         .catch(e=>reject(e))
                     });
+                } else if (compRow.symbol?.packageDetail?.dataStr instanceof Object && compRow.symbol?.packageDetail?.dataStr.shape) {
+                    // 某些符号的封装并未存在3D模型，需要在符号中获取
+                    let shapes = compRow.symbol?.packageDetail?.dataStr.shape;
+                    let shape = shapes[shapes.length - 1];
+                    if (shape.includes('SVGNODE~')) {
+                        shape = shape.replace('\"', '"');
+                        let uuidExec = /"uuid":"(\d*\w*)"/.exec(shape);
+                        let titleExec = /"title":"(\d*\w*[^"]*)"/.exec(shape);
+                        let title = "Unknown";
+                        if (titleExec) {
+                            title = titleExec[1];
+                        }
+                        if (uuidExec) {
+                            let uuid_3d = uuidExec[1];
+                            axios.get<string>(std3DPrefix + uuid_3d)
+                                .then(({ data }) => {
+                                shadowRow.model3d = {docType:JLCDocType.Model3D,
+                                    uuid:uuid_3d,
+                                    title:comp.device?.attributes['3D Model Title'] || comp.model_3d?.title || title,
+                                dataStr:""};
+                                shadowRow.data3d = data;
+                                resolve(true);
+                            })
+                            .catch(e=>reject(e));
+                        }
+                    }
                 }else{
                     resolve(false);
                 }
@@ -291,6 +319,24 @@ export function getStdComponent(uuid:string, compRow:CompRow_t|CompRow_t[], devi
                     compRow = compRow[compRow.length-1];
                 }
                 compRow.symbol = comp;
+                // 获取元件datasheet的url
+                if (compRow.symbol.szlcsc?.id) {
+                    compRow.symbol.itemUrl = stdItemPrefix + compRow.symbol.szlcsc.id + '.html'
+                    chrome.runtime.sendMessage({
+                        contentScriptQuery: 'fetchUrl',
+                        url: compRow.symbol.itemUrl
+                    },
+                        response => {
+                            let pdfUrlExec = /downloadFileNoRemark\('(https:\/\/.*\.pdf)/.exec(response);
+                            if (pdfUrlExec) {
+                                let pdfUrl = pdfUrlExec[1];
+                                if (!(compRow instanceof Array) && compRow.symbol) {
+                                    compRow.symbol.datasheetUrl = pdfUrl;
+                                }
+                            }
+                        }
+                    );
+                }
                 compRow.symbol.device = device;
                 if(comp.dataStr instanceof Object && comp.dataStr.head?.puuid){
                     getStdComponent(comp.dataStr.head?.puuid, compRow, device)

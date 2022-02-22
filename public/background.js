@@ -33,6 +33,15 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 */
 //console.log("xxxx", XMLHttpRequest);
 
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.contentScriptQuery == 'fetchUrl') {
+        fetch(request.url)
+            .then(response => response.text())
+            .then(response => sendResponse(response))
+        return true;
+    }
+});
+
 function loadSynchronously(url){
   content = JSON.stringify(chrome) + url;
   return content;
@@ -50,7 +59,7 @@ chrome.webRequest.onBeforeRequest.addListener((details)=>{
   var javascriptCode = loadSynchronously(details.url);
   // [TODO] hook something you like
   return {redirectUrl: chrome.extension.getURL('inject.js')};
-  //return { redirectUrl: "data:text/javascript," 
+  //return { redirectUrl: "data:text/javascript,"
   //                     + encodeURIComponent(javascriptCode) };
 },
 { urls: ["https://*.lceda.cn/*/ui.js"],
