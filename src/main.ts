@@ -60,9 +60,11 @@ function injectContent () {
         div.id = 'kicadhelperButton'
         let lastMenu:string|null = null
         let helpMenu:HTMLSpanElement|undefined = undefined;
+        let hasKiButton = false;
         for(let e of menuBar.children){
             if(lastMenu && lastMenu.includes("common-help")){
                 menuBar.insertBefore(div, e);
+                hasKiButton = true;
                 lastMenu = null;
                 helpMenu&&monitor_language(helpMenu);
                 break;
@@ -72,11 +74,18 @@ function injectContent () {
         }
         if(lastMenu && lastMenu.includes("common-help")){
             menuBar.appendChild(div);
+            hasKiButton = true;
             helpMenu&&monitor_language(helpMenu);
+        }
+        if(!hasKiButton){
+            div.style.position = "absolute";
+            div.style.left = "2px";
+            div.style.top = "2px";
+            document.body.appendChild(div);
         }
         let app = createApp(Btn);
         app.config.globalProperties.$toggleVisible = toggleVisible;
-        app.use(ElementPlus).mount('#kicadhelperButton')
+        app.use(ElementPlus,{} as any).mount('#kicadhelperButton')
     }
 
     const div = document.createElement('div')
@@ -84,7 +93,7 @@ function injectContent () {
 	document.body.appendChild(div)
     let app = createApp(App);
     app.config.globalProperties.$toggleVisible = toggleVisible;
-    app.use(ElementPlus).mount('#kicadhelperContent')
+    app.use(ElementPlus,{} as any).mount('#kicadhelperContent')
     
     console.log("content inject");
 }
@@ -94,12 +103,12 @@ if(document.URL.includes("lceda.cn") || document.URL.includes("easyeda.com")){
 }else{
     let app1 = createApp(Btn);
     app1.config.globalProperties.$toggleVisible = toggleVisible;
-    app1.use(ElementPlus).mount('#kicadhelperButton');
+    app1.use(ElementPlus,{} as any).mount('#kicadhelperButton');
     let app2 = createApp(App);
     app2.config.globalProperties.$toggleVisible = toggleVisible;
-    app2.use(ElementPlus).mount('#kicadhelperContent');
+    app2.use(ElementPlus,{} as any).mount('#kicadhelperContent');
 
-    createApp(Test).use(ElementPlus).mount("#testframe");
+    createApp(Test).use(ElementPlus,{} as any).mount("#testframe");
 }
 
 

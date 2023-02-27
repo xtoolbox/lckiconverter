@@ -10,6 +10,7 @@ function saveSetting(){
       height:Number(document.getElementById('posH').value),
       visible:document.getElementById('Visible').checked,
       tryStep:document.getElementById('tryStep').checked,
+      setUUID:document.getElementById('setUUID').checked,
       prefix:document.getElementById("prefix").value,
       modelPrefix:document.getElementById("modelPrefix").value
     }
@@ -25,6 +26,7 @@ function loadSetting(){
         document.getElementById('posH').value = data.height;
         document.getElementById('Visible').checked = data.visible;
         document.getElementById('tryStep').checked = data.tryStep;
+        document.getElementById('setUUID').checked = data.setUUID;
         document.getElementById('prefix').value = data.prefix;
         document.getElementById('modelPrefix').value = data.modelPrefix;
     });
